@@ -30,6 +30,11 @@ namespace WebApi.Services
             return _items.ToList();
         }
 
+        public Item GetById(Guid id)
+        {
+            return _items.Find(x => x.Id == id);
+        }
+
         public Guid? Add(Item item)
         {
             if (_items.Any(x => x.Name.Equals(item.Name)))

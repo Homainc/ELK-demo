@@ -1,0 +1,28 @@
+filebeat.registry.flush: 2s
+
+output.elasticsearch:
+  hosts: ['${ELASTICSEARCH_HOSTS:elasticsearch:9200}']
+  username: '${ELASTICSEARCH_USERNAME:}'
+  password: '${ELASTICSEARCH_PASSWORD:}'
+  index: 'elk-filebeat-%{[agent.version]}-%{+yyyy.MM.dd}'
+  
+setup.template:
+  name: "elk-filebeat"
+  pattern: "elk-filebeat-*"
+  
+setup.ilm.enabled: false
+
+setup.kibana:
+  host: '${KIBANA_HOST:kibana:5601}'
+  username: '${KIBANA_USER:}'
+  password: '${KIBANA_PASSWORD:}'
+
+setup.dashboards:
+  enabled: true
+  index: 'elk-filebeat-*'
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+      hints.default_config.enabled: false

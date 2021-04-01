@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solutions Items", "Solutions Items", "{20A54AD9-D5A3-4559-9B33-8FF99720BFB3}"
 ProjectSection(SolutionItems) = preProject
 	elastic-search.yaml = elastic-search.yaml
+	filebeat.docker.yaml = filebeat.docker.yaml
 EndProjectSection
 EndProject
 Global
