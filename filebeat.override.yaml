@@ -1,0 +1,33 @@
+filebeat.registry.flush: 2s
+
+output.elasticsearch:
+  hosts: ['${ELASTICSEARCH_HOSTS:elasticsearch:9200}']
+  username: '${ELASTICSEARCH_USERNAME:}'
+  password: '${ELASTICSEARCH_PASSWORD:}'
+
+filebeat.modules:
+  - module: redis
+
+setup.kibana:
+  host: '${KIBANA_HOST:kibana:5601}'
+  username: '${KIBANA_USER:}'
+  password: '${KIBANA_PASSWORD:}'
+
+setup.dashboards.enabled: true
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      templates:
+        - condition:
+            contains:
+              docker.container.image: redis
+          config:
+            - module: redis
+              log:
+                input:
+                  type: container
+                  close_inactive: 1m
+                  scan_frequency: 10s
+                  paths:
+                    - /var/lib/docker/containers/${data.docker.container.id}/*.log

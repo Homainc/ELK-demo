@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solutions Items", "Solution
 ProjectSection(SolutionItems) = preProject
 	elastic-search.yaml = elastic-search.yaml
 	filebeat.docker.yaml = filebeat.docker.yaml
+	filebeat.override.yaml = filebeat.override.yaml
 EndProjectSection
 EndProject
 Global
