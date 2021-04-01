@@ -13,17 +13,34 @@ namespace WebApi.Controllers
     {
         private readonly IStorageService _storage;
         private readonly ILogger _logger;
+        private readonly Random _random;
         
         public HomeController(IStorageService storage, ILogger<HomeController> logger)
         {
             _storage = storage;
             _logger = logger;
+            _random = new Random();
         }
 
         [HttpGet]
         public ActionResult<IList<Item>> GetAll()
         {
             return Ok(_storage.GetAll());
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<Item> GetById(Guid id)
+        {
+            var item = _storage.GetById(id);
+
+            if (item is null)
+            {
+                _logger.LogError("Item with {Id} not found", id);
+                return NotFound();
+            }
+            
+            _logger.LogInformation("Item with id {Id} was retrieved", id);
+            return Ok(item);
         }
 
         [HttpPost]
@@ -35,7 +52,7 @@ namespace WebApi.Controllers
                 return Conflict();
             }
             
-            return CreatedAtAction(nameof(Create), item);
+            return CreatedAtAction(nameof(GetById), new { id }, null);
         }
 
         [HttpPut("{id}")]
@@ -58,6 +75,28 @@ namespace WebApi.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpGet("Random")]
+        public IActionResult Random()
+        {
+            var exId = _random.Next() % 5;
+            switch (exId)
+            {
+                case 0:
+                    throw new ArgumentException(nameof(exId));
+                case 1:
+                    throw new NullReferenceException(nameof(exId));
+                case 2:
+                    throw new ApplicationException();
+                case 3:
+                    throw new ArithmeticException();
+                default:
+                    _logger.LogInformation("No exception");
+                    break;
+            }
+
+            return Ok();
         }
     }
 }
